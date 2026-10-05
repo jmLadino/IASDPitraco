@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planificación IASD Pitraco</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            headerBg: '#f1f5f2',
+                            border: '#e1e8e2',
+                            assignedBg: '#e8f5e9',
+                            assignedText: '#2e7d32',
+                            pendingBg: '#fff3e0',
+                            pendingText: '#e65100',
+                            accent: '#1b5e20'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .badge-transition {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .badge-transition:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        .badge-transition:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 font-sans min-h-screen text-slate-800 flex flex-col justify-between p-4 md:p-8">
+
+    <div class="max-w-7xl mx-auto w-full space-y-6">
+        
+        <!-- Header Section with Logo & Title -->
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white p-6 rounded-2xl shadow-sm border border-slate-200/80">
+            <div class="flex items-center gap-4">
+                <div class="w-16 h-16 md:w-20 md:h-20 flex-shrink-0 flex items-center justify-center p-1 bg-white rounded-xl shadow-xs border border-slate-100">
+                    <img 
+                        src="https://jmladino.github.io/Rescatados/Imagenes/LogoIglesia.png" 
+                        alt="Logo Iglesia Adventista" 
+                        class="w-full h-full object-contain"
+                        onerror="this.onerror=null; this.src='https://placehold.co/80x80/1b5e20/ffffff?text=IASD';"
+                    />
+                </div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-bold text-slate-800 tracking-tight">
+                        Planificación IASD Pitraco
+                    </h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="bg-emerald-50 border border-emerald-200/80 px-4 py-2.5 rounded-xl text-center min-w-[100px]">
+                    <span class="block text-[11px] font-semibold text-emerald-700 uppercase tracking-wider">Asignados</span>
+                    <span id="stat-assigned" class="text-2xl font-bold text-emerald-800">0</span>
+                </div>
+                <div class="bg-amber-50 border border-amber-200/80 px-4 py-2.5 rounded-xl text-center min-w-[100px]">
+                    <span class="block text-[11px] font-semibold text-amber-700 uppercase tracking-wider">Pendientes</span>
+                    <span id="stat-pending" class="text-2xl font-bold text-amber-800">0</span>
+                </div>
+                <div class="bg-slate-50 border border-slate-200/80 px-4 py-2.5 rounded-xl text-center min-w-[100px]">
+                    <span class="block text-[11px] font-semibold text-slate-500 uppercase tracking-wider">Total</span>
+                    <span id="stat-total" class="text-2xl font-bold text-slate-700">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-200/80 shadow-xs">
+            <div class="flex items-center gap-2">
+                <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider mr-1">
+                    <i class="fa-solid fa-filter text-slate-400 mr-1"></i> Filtrar:
+                </span>
+                <button onclick="setFilter('all')" id="btn-filter-all" class="px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-800 text-white border-emerald-800 shadow-xs transition">Todos</button>
+                <button onclick="setFilter('assigned')" id="btn-filter-assigned" class="px-3 py-1.5 text-xs font-medium rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 transition">Solo Asignados</button>
+                <button onclick="setFilter('pending')" id="btn-filter-pending" class="px-3 py-1.5 text-xs font-medium rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 transition">Solo Pendientes</button>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-brand-headerBg border-b border-brand-border">
+                            <th class="py-4 px-6 text-xs md:text-sm font-bold text-slate-700 whitespace-nowrap min-w-[140px]">Sábado</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Plataforma Escuela Sabática</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Misionero</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Maestro de Escuela Sabática</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Plataforma Sermón</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Sermón</th>
+                        </tr>
+                    </thead>
+                    <tbody id="schedule-body" class="divide-y divide-slate-100">
+                        <!-- Content dynamically generated in JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="mt-12 mb-4 text-center text-xs text-slate-500 border-t border-slate-200/60 pt-6">
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-2">
+            <span class="font-semibold text-slate-700">IASD Pitraco Bandera</span>
+            <br>
+            <span class="hidden sm:inline text-slate-300">•</span>
+            <a 
+                href="https://maps.app.goo.gl/T4sVdrnijmATE5pC7" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 text-emerald-700 hover:text-emerald-800 font-medium hover:underline transition"
+            >
+                <i class="fa-solid fa-location-dot text-red-500"></i>
+                <span>Ver ubicación en Google Maps - IASD Pitraco Bandera, Cholchol, Araucanía</span>
+            </a>
+        </div>
+    </footer>
+
+    <script>
+        // Sample dataset using strict dd-mm-yyyy dates
+        const scheduleData = [
+            { date: "03-10-2026", roles: [true, true, true, true, true] },
+            { date: "10-10-2026", roles: [false, true, true, false, false] },
+            { date: "17-10-2026", roles: [false, false, true, false, true] },
+            { date: "24-10-2026", roles: [false, false, true, false, true] },
+            { date: "31-10-2026", roles: [false, false, true, false, true] },
+            { date: "07-11-2026", roles: [false, false, true, false, false] },
+            { date: "14-11-2026", roles: [false, false, true, false, false] },
+            { date: "21-11-2026", roles: [false, false, true, false, false] },
+            { date: "28-11-2026", roles: [false, false, true, false, false] },
+            { date: "05-12-2026", roles: [false, false, true, false, false] },
+            { date: "12-12-2026", roles: [false, false, true, false, false] },
+            { date: "19-12-2026", roles: [false, false, true, false, false] },
+            { date: "26-12-2026", roles: [false, false, true, false, false] }
+        ];
+
+        let currentFilter = 'all';
+
+        // Spanish month abbreviations array
+        const monthNamesEs = [
+            "ene", "feb", "mar", "abr", "may", "jun",
+            "jul", "ago", "sep", "oct", "nov", "dic"
+        ];
+
+        /**
+         * Converts 'dd-mm-yyyy' to long tooltip format e.g. '03 de oct de 2026'
+         */
+        function formatDateTooltip(dateStr) {
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+
+            const day = parts[0];
+            const monthIndex = parseInt(parts[1], 10) - 1;
+            const year = parts[2];
+
+            const monthAbbr = monthNamesEs[monthIndex] || parts[1];
+            return `${day} de ${monthAbbr} de ${year}`;
+        }
+
+        // Render table rows based on state & filter
+        function renderTable() {
+            const tbody = document.getElementById('schedule-body');
+            tbody.innerHTML = '';
+
+            let totalAssigned = 0;
+            let totalPending = 0;
+            let totalSpaces = 0;
+
+            scheduleData.forEach((row, rowIndex) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-slate-50/70 transition-colors';
+
+                // Date column displaying dd-mm-yyyy with Spanish long date tooltip
+                const dateTd = document.createElement('td');
+                dateTd.className = 'py-4 px-6 font-bold text-slate-800 text-sm whitespace-nowrap cursor-help';
+                
+                const tooltipText = formatDateTooltip(row.date);
+                dateTd.setAttribute('title', tooltipText);
+
+                dateTd.innerHTML = `
+                    <span class="inline-flex items-center gap-1.5 border-b border-dashed border-slate-300 pb-0.5">
+                        <i class="fa-regular fa-calendar-days text-slate-400 text-xs"></i>
+                        ${row.date}
+                    </span>
+                `;
+                tr.appendChild(dateTd);
+
+                // Role columns
+                row.roles.forEach((isAssigned, roleIndex) => {
+                    totalSpaces++;
+                    if (isAssigned) totalAssigned++;
+                    else totalPending++;
+
+                    const td = document.createElement('td');
+                    td.className = 'py-4 px-3 text-center';
+
+                    // Filter check
+                    const matchesFilter = 
+                        currentFilter === 'all' || 
+                        (currentFilter === 'assigned' && isAssigned) || 
+                        (currentFilter === 'pending' && !isAssigned);
+
+                    if (matchesFilter) {
+                        const button = document.createElement('button');
+                        button.onclick = () => toggleStatus(rowIndex, roleIndex);
+                        button.setAttribute('aria-label', `Cambiar estado de ${row.date}`);
+                        button.className = `badge-transition inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-medium cursor-pointer border select-none w-28 ${
+                            isAssigned 
+                                ? 'bg-[#e7f6eb] text-[#2e7d32] border-[#c8ebd1]' 
+                                : 'bg-[#fff3e0] text-[#e65100] border-[#fde2be]'
+                        }`;
+
+                        button.innerHTML = isAssigned 
+                            ? `<i class="fa-solid fa-check text-[10px]"></i> Asignado`
+                            : `<i class="fa-regular fa-circle text-[10px]"></i> Pendiente`;
+
+                        td.appendChild(button);
+                    } else {
+                        const span = document.createElement('span');
+                        span.className = 'text-xs text-slate-300 font-light';
+                        span.textContent = '—';
+                        td.appendChild(span);
+                    }
+
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+
+            // Update stats counters
+            document.getElementById('stat-assigned').textContent = totalAssigned;
+            document.getElementById('stat-pending').textContent = totalPending;
+            document.getElementById('stat-total').textContent = totalSpaces;
+        }
+
+        // Toggle badge status on click
+        function toggleStatus(rowIndex, roleIndex) {
+            scheduleData[rowIndex].roles[roleIndex] = !scheduleData[rowIndex].roles[roleIndex];
+            renderTable();
+        }
+
+        // Set table filter
+        function setFilter(filter) {
+            currentFilter = filter;
+            
+            ['all', 'assigned', 'pending'].forEach(f => {
+                const btn = document.getElementById(`btn-filter-${f}`);
+                if (f === filter) {
+                    btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg border bg-emerald-800 text-white border-emerald-800 shadow-xs transition';
+                } else {
+                    btn.className = 'px-3 py-1.5 text-xs font-medium rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 transition';
+                }
+            });
+
+            renderTable();
+        }
+
+        // Initial Load
+        window.onload = function() {
+            renderTable();
+        };
+    </script>
+</body>
+</html>
