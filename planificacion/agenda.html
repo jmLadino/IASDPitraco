@@ -101,11 +101,11 @@
                     <thead>
                         <tr class="bg-brand-headerBg border-b border-brand-border">
                             <th class="py-4 px-6 text-xs md:text-sm font-bold text-slate-700 whitespace-nowrap min-w-[140px]">Sábado</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Sermón</th>
+                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Plataforma Sermón</th>
                             <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Plataforma Escuela Sabática</th>
                             <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Misionero</th>
                             <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Maestro de Escuela Sabática</th>
-                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Plataforma Sermón</th>
-                            <th class="py-4 px-4 text-xs md:text-sm font-bold text-slate-700 text-center whitespace-nowrap">Sermón</th>
                         </tr>
                     </thead>
                     <tbody id="schedule-body" class="divide-y divide-slate-100">
@@ -137,19 +137,19 @@
     <script>
         // Calendario JSON
         const scheduleData = [
-            { date: "03-10-2026", roles: [true, true, true, true, true] },
-            { date: "10-10-2026", roles: [false, true, true, false, false] },
-            { date: "17-10-2026", roles: [false, false, true, false, true] },
-            { date: "24-10-2026", roles: [false, false, true, false, true] },
-            { date: "31-10-2026", roles: [false, false, true, false, true] },
-            { date: "07-11-2026", roles: [false, false, true, false, false] },
-            { date: "14-11-2026", roles: [false, false, true, false, false] },
-            { date: "21-11-2026", roles: [false, false, true, false, false] },
-            { date: "28-11-2026", roles: [false, false, true, false, false] },
-            { date: "05-12-2026", roles: [false, false, true, false, false] },
-            { date: "12-12-2026", roles: [false, false, true, false, false] },
-            { date: "19-12-2026", roles: [false, false, true, false, false] },
-            { date: "26-12-2026", roles: [false, false, true, false, false] }
+{ date: "03-10-2026", roles: [true, true, true, true, true] },
+{ date: "10-10-2026", roles: [false, false, false, true, true] },
+{ date: "17-10-2026", roles: [true, false, false, false, true] },
+{ date: "24-10-2026", roles: [true, false, false, false, true] },
+{ date: "31-10-2026", roles: [true, false, false, false, true] },
+{ date: "07-11-2026", roles: [false, false, false, false, true] },
+{ date: "14-11-2026", roles: [false, false, false, false, true] },
+{ date: "21-11-2026", roles: [false, false, false, false, true] },
+{ date: "28-11-2026", roles: [false, false, false, false, true] },
+{ date: "05-12-2026", roles: [false, false, false, false, true] },
+{ date: "12-12-2026", roles: [false, false, false, false, true] },
+{ date: "19-12-2026", roles: [false, false, false, false, true] },
+{ date: "26-12-2026", roles: [false, false, false, false, true] }
         ];
 
         let currentFilter = 'all';
